@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz Cumpleaños Kass</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f8cdda, #f5f7fa);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      animation: fadeIn 2s ease;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .heart {
+      color: red;
+      animation: beat 1s infinite;
+    }
+
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .gallery img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.1);
+      z-index: 1;
+    }
+
+    .romantic-message {
+      font-size: 1.5em;
+      color: #e91e63;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeInOut 5s infinite;
+    }
+
+    .timeline {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 0;
+  }
+
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #e91e63;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+  }
+
+  .event {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: calc(50% - 30px); /* Ajustado para dar espacio a las fechas */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .event.visible {
+    opacity: 1;
+  }
+
+  .event::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -44px; /* Ajustado */
+    background-color: white;
+    border: 4px solid #e91e63;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  .event::before {
+    content: attr(data-date);
+    position: absolute;
+    top: 24px;
+    right: -140px; /* Ajustado */
+    color: #e91e63;
+    font-weight: bold;
+    width: 100px; /* Ancho fijo para las fechas */
+    text-align: left;
+  }
+
+  .event:nth-child(odd) {
+    left: 0;
+  }
+
+  .event:nth-child(even) {
+    left: 50%;
+  }
+
+  .event:nth-child(even)::after {
+    left: -44px; /* Ajustado */
+  }
+
+  .event:nth-child(even)::before {
+    left: -140px; /* Ajustado */
+    right: auto;
+    text-align: right;
+  }
+
+    .history-button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .history-button:hover {
+      background-color: #c2185b;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Ajustes para la línea de tiempo dentro del modal */
+    .modal .timeline::after {
+      left: 31px;
+    }
+
+    .modal .event {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+
+    .modal .event::before {
+      left: 0;
+      right: auto;
+    }
+
+    .modal .event:nth-child(even) {
+      left: 0%;
+    }
+
+    .modal .event::after {
+      left: 15px;
+    }
+
+    .modal .event::before {
+      left: 0;
+      right: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .gallery img {
+        width: calc(50% - 10px);
+        height: auto;
+      }
+    }
+    
+    .event {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+    
+    .event::before {
+      left: 0;
+      right: auto;
+      top: -30px; /* Mover la fecha arriba del evento */
+      width: auto;
+    }
+    
+    .event:nth-child(even) {
+      left: 0%;
+    }
+    
+    .event:nth-child(odd)::after, .event:nth-child(even)::after {
+      left: 15px;
+    }
+    
+    .event:nth-child(odd)::before, .event:nth-child(even)::before {
+      left: 0;
+      right: auto;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Feliz Cumpleaños, Esposa Mía 🎂</h1>
+    <p>
+      Hoy celebramos tu vida, tu alegría, y el inmenso amor que me das cada día.<br />
+      Gracias por ser tú, por estar siempre, por iluminar mi mundo ❤️
+    </p>
+    <div class="gallery">
+      <img src="img/IMG-20250510-WA0002.jpg" alt="Foto 1">
+      <img src="img/IMG-20250510-WA0003.jpg" alt="Foto 2">
+      <img src="img/IMG-20250510-WA0004.jpg" alt="Foto 3">
+      <img src="img/IMG-20250510-WA0005.jpg" alt="Foto 4">
+      <img src="img/IMG-20250510-WA0006.jpg" alt="Foto 5">
+      <img src="img/IMG-20250510-WA0007.jpg" alt="Foto 6">
+      <img src="img/IMG-20250510-WA0008.jpg" alt="Foto 7">
+      <img src="img/IMG-20250510-WA0009.jpg" alt="Foto 8">
+      <img src="img/IMG-20250510-WA0010.jpg" alt="Foto 9">
+      <img src="img/IMG-20250510-WA0011.jpg" alt="Foto 10">
+    </div>
+   
+    <p class="romantic-message" id="romanticMessage"></p>
+    <p class="heart">💖💖💖</p>
+    <p>Con todo mi amor,<br />Tu esposo programador 😘</p>
+  </div>
+
+  <audio id="backgroundMusic" loop>
+    <source src="mp3/musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const messages = [
+      "Cada día a tu lado es un regalo",
+      "Tu sonrisa ilumina mi mundo",
+      "Eres mi amor eterno",
+      "Contigo, cada momento es mágico"
+    ];
+  
+    let currentIndex = 0;
+    const romanticMessage = document.getElementById('romanticMessage');
+  
+    function changeMessage() {
+      romanticMessage.textContent = messages[currentIndex];
+      currentIndex = (currentIndex + 1) % messages.length;
+    }
+  
+    setInterval(changeMessage, 5000);
+  
+    // Reproducir música de fondo
+    const music = document.getElementById('backgroundMusic');
+    
+    // Función para reproducir música
+    function playMusic() {
+      music.play().catch(error => {
+        console.log("Reproducción automática bloqueada:", error);
+      });
+    }
+  
+    // Intenta reproducir la música cuando la página se carga
+    window.addEventListener('load', playMusic);
+  
+    // También intenta reproducir la música cuando el usuario interactúa con la página
+    document.body.addEventListener('click', playMusic);
+  
+    // Animación de la línea de tiempo
+    function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+  
+    function handleScroll() {
+      const events = document.querySelectorAll('.event');
+      events.forEach(event => {
+        if (isElementInViewport(event) || (modal && modal.style.display === "block")) {
+          event.classList.add('visible');
+        }
+      });
+    }
+  
+    window.addEventListener('load', handleScroll);
+    window.addEventListener('scroll', handleScroll);
+  
+    // Galería de imágenes
+    const gallery = document.querySelector('.gallery');
+    gallery.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG') {
+        const fullImg = document.createElement('div');
+        fullImg.style.position = 'fixed';
+        fullImg.style.top = '0';
+        fullImg.style.left = '0';
+        fullImg.style.width = '100%';
+        fullImg.style.height = '100%';
+        fullImg.style.backgroundColor = 'rgba(0,0,0,0.8)';
+        fullImg.style.display = 'flex';
+        fullImg.style.justifyContent = 'center';
+        fullImg.style.alignItems = 'center';
+        fullImg.style.zIndex = '1000';
+  
+        const img = document.createElement('img');
+        img.src = e.target.src;
+        img.style.maxWidth = '90%';
+        img.style.maxHeight = '90%';
+        img.style.objectFit = 'contain';
+  
+        fullImg.appendChild(img);
+        document.body.appendChild(fullImg);
+  
+        fullImg.addEventListener('click', () => {
+          document.body.removeChild(fullImg);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
